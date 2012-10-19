@@ -10,7 +10,8 @@ in turn means that it has little features too.
 
 First of all, change the variables necessary on the Makefile, change the three
 $DEF variables to point towards the correct paths, change the HOST variable to
-your desired host platform. (empty if you're targeting your current arch)
+your desired host platform. (empty if you're targeting your current arch), now 
+just run make and copy the binary where you want it to be.
 
 You can customize the driver by changing the polling rate and sensivity (sic)
 on the analog.conf file, which should be placed on your home folder.
