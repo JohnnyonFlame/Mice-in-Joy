@@ -1,7 +1,7 @@
 /*
  * Mouse pointer emulator using the Analog Joystick.
  * 
- * Mice Joy Copyright (c) 2012 Johnny on Flame
+ * Mice in Joy Copyright (c) 2012 Johnny on Flame
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
