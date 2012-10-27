@@ -30,10 +30,12 @@
 void doConfigure(char *f){
 	char buf[32];
 	
-	FILE *config_id = fopen(f, "r");
-	assert(config_id);
+	FILE *config_id = NULL;
 	
-	if (config_id) {
+	config_id = fopen(f, "r");
+	//assert(config_id);
+	
+	if (config_id!=NULL) {
 		while(getLine(config_id, buf))
 		{
 			char opt[16];
@@ -46,6 +48,33 @@ void doConfigure(char *f){
 				doOption(opt, value);
 			}
 		}
+	}
+	else
+	{
+		char p[128], ch;
+		sprintf(p, "%s/%s", getenv("PWD"), "analog.conf");
+		
+		FILE *source = fopen(p, "r");
+		
+		if (source==NULL)
+			return;
+		
+		FILE *target = fopen(f, "w");
+		
+		if (target==NULL)
+		{
+			fclose(target);
+			return;
+		}
+		
+		while( ( ch = fgetc(source) ) != EOF )
+			fputc(ch, target);
+		
+		fclose(target);
+		fclose(source);
+		
+		sensivity = MAX_ABS/10;
+		polling_rate = 1000000/33;
 	}
 }
 
