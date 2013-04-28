@@ -34,7 +34,7 @@ void doMouse();
 int report_mice(int f, unsigned int axis, int value);
 int report_ev(int f, int type, int code, int value);
 
-extern int polling_rate;
-extern int sensivity;
+extern float polling_rate;
+extern float sensitivity;
 
 #endif //__ANALOG_H__

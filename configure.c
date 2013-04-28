@@ -18,6 +18,7 @@
  * 
  */
 
+#include <ini.h>
 #include <stdio.h>
 #include <assert.h>
 
@@ -27,80 +28,46 @@
 #include "configure.h"
 #include "analog.h"
 
+/*
+ * __alloccpy_str( char* str, size_t b, const char* buf)
+ * Allocates and copies a string from a buffer into a new char.
+ */
+
+#define __alloccpy_str(a, b, c) \
+	a = alloca(b+1); \
+	a[b] = '\0'; \
+	memcpy(a, c, b);
+
 void doConfigure(char *f){
-	char buf[32];
-	
-	FILE *config_id = NULL;
-	
-	config_id = fopen(f, "r");
-	//assert(config_id);
-	
-	if (config_id!=NULL) {
-		while(getLine(config_id, buf))
-		{
-			char opt[16];
-			int value=0;
-			
-			printf("%s\n", buf);
-			
-			if (sscanf(buf, "%s = %i", opt, &value))
-			{
-				doOption(opt, value);
+
+	struct INI *ini = ini_open(f);
+	const char *bufa, *bufb, *bufc;
+	size_t sa, sb, sc;
+
+	if (ini) {
+			while (ini_next_section(ini, &bufa, &sa)) {
+					char *section;
+					__alloccpy_str(section, sa, bufa);
+
+					while (ini_read_pair(ini, &bufb, &sb, &bufc, &sc)) {
+							char *key, *value;
+							__alloccpy_str(key, 	sb, bufb);
+							__alloccpy_str(value, sc, bufc);
+
+							doOption(key, value);
+					}
 			}
-		}
-	}
-	else
-	{
-		char p[128], ch;
-		sprintf(p, "%s/%s", getenv("PWD"), "analog.conf");
-		
-		FILE *source = fopen(p, "r");
-		
-		if (source==NULL)
-			return;
-		
-		FILE *target = fopen(f, "w");
-		
-		if (target==NULL)
-		{
-			fclose(target);
-			return;
-		}
-		
-		while( ( ch = fgetc(source) ) != EOF )
-			fputc(ch, target);
-		
-		fclose(target);
-		fclose(source);
-		
-		sensivity = MAX_ABS/10;
-		polling_rate = 1000000/33;
 	}
 }
 
-int getLine(FILE *f, char *c){
-	char buf[32];
-	
-	if (!fgets(buf, sizeof(buf), f))
-		return 0;
-	
-	int len = strlen(buf)-1;
-	if(buf[len] == '\n') 
-		buf[len] = '\0';
-	
-	printf("%s\n", buf);
-	
-	strcpy(c, buf);
-	
-	return 1;
-}
-
-void doOption(char *opt, int value)
+void doOption(char *key, char *val)
 {
-	if (!strcmp(opt, "sensivity"))
-		sensivity = MAX_ABS/value;
+	float value = atof(val);
+
+	if (!strcmp(key, "sensitivity"))
+		sensitivity = 1 / (MAX_ABS/value);
 	
-	if (!strcmp(opt, "polling"))
+	if (!strcmp(key, "polling"))
 		polling_rate = 1000000/value;
-	
+
 }

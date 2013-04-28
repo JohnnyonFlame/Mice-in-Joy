@@ -22,7 +22,7 @@
 #define __CONFIGURE_H__
 
 int getLine(FILE *f, char *c);
-void doOption(char *opt, int value);
+void doOption(char *opt, char *val);
 
 void doConfigure(char *f);
 

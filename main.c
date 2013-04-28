@@ -28,6 +28,7 @@
 
 int main(int argc, char *argv[])
 {
+#ifndef DEBUG
 	pid_t pid, sid;
 	
 	pid = fork();
@@ -56,6 +57,7 @@ int main(int argc, char *argv[])
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
+#endif
 	
 	doMouse();
 	

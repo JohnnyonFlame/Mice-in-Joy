@@ -46,8 +46,8 @@ static struct uinput_user_dev uud = {
 
 int axis[2];
 
-int polling_rate 	= 1000000/66;
-int sensivity		= MAX_ABS/5;
+float polling_rate 	= 1000000/66;
+float sensitivity		= 1/(MAX_ABS/5);
 
 void doMouse()
 {
@@ -96,9 +96,10 @@ void doMouse()
 			} 	
 		}
 		
-		report_ev(uinput_id, EV_REL, REL_X, axis[0]/sensivity);
-		report_ev(uinput_id, EV_REL, REL_Y, axis[1]/sensivity);
+		report_ev(uinput_id, EV_REL, REL_X, axis[0]*sensitivity);
+		report_ev(uinput_id, EV_REL, REL_Y, axis[1]*sensitivity);
  		report_ev(uinput_id, EV_SYN, SYN_REPORT, 0); 		
+
 	}
 	
 	close(uinput_id);
@@ -115,6 +116,6 @@ int report_ev(int f, int type, int code, int value) {
 	ev.type 	= type;
 	ev.code 	= code;
 	ev.value 	= value;
-	
+
 	return write(f, &ev, sizeof(ev));
 }
