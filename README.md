@@ -16,6 +16,11 @@ just run make and copy the binary where you want it to be.
 You can customize the driver by changing the polling rate and sensivity (sic)
 on the analog.conf file, which should be placed on your home folder.
 
+--- Thanks:
+
+- The homebrew console scene (GPH, GBATemp, Dingoonity...)
+- Sketchstick (for the icon included in this project)
+
 --- LICENSE:
 
 This program is free software: you can redistribute it and/or modify
